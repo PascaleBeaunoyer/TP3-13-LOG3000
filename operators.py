@@ -20,4 +20,4 @@ def divide(a,b):
     """Rôle: retourne le quotient de deux nombres.
        Entrées: a, b (float ou int)
        Sortie: quotient de a et b (float ou int)"""
-    return a // b
+    return a / b
