@@ -1,6 +1,10 @@
 from flask import Flask, request, render_template
 from operators import add, subtract, multiply, divide
-
+"""
+Rôle: application Flask pour effectuer des calculs simples via une interface web.
+Entrées: aucune (les entrées sont fournies via le formulaire web).
+Sortie: page HTML affichant le résultat du calcul ou un message d'erreur.
+"""
 app = Flask(__name__)
 
 OPS = {
@@ -11,6 +15,9 @@ OPS = {
 }
 
 def calculate(expr: str):
+    """Rôle: évalue une expression mathématique simple (deux opérandes et un opérateur).
+       Entrées: expr (str) - expression mathématique sous forme de chaîne
+       Sortie: résultat du calcul (float ou int) ou lève une exception si l'expression est invalide."""
     if not expr or not isinstance(expr, str):
         raise ValueError("empty expression")
 
@@ -43,6 +50,9 @@ def calculate(expr: str):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    """Rôle: page d'accueil de l'application Flask. Affiche un formulaire pour entrer une expression mathématique.
+       Entrées: aucune (les entrées sont fournies via le formulaire web).
+       Sortie: page HTML affichant le résultat du calcul ou un message d'erreur."""
     result = ""
     if request.method == 'POST':
         expression = request.form.get('display', '')

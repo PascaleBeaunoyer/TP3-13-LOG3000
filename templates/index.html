@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- Interface de la calculatrice; Flask/Jinja fournit le résultat et le formulaire est traité par la route /. -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -37,11 +38,18 @@
 </div>
 
 <script>
+   /** Ajoute une valeur au champ d'affichage de la calculatrice.
+    * @param {string} value Valeur ou opérateur à ajouter.
+    * @returns {void} Met à jour le champ #display.
+    */
    function appendToDisplay(value) {
       const display = document.getElementById('display');
       display.value += value;
    }
 
+   /** Efface le champ d'affichage de la calculatrice.
+    * @returns {void} Vide le champ #display.
+    */
    function clearDisplay() {
       document.getElementById('display').value = '';
    }

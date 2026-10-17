@@ -71,19 +71,34 @@ http://127.0.0.1:5000/
 plus tard).  
 
 ### Test
+1. Commande d’exécution depuis la racine : ``python -m pytest tests/ -v``
+2. La liste des tests s'afficheront dans le terminal (échoue ou réussite)
+Pour plus de détails, voir le README.md sous le répertoire /tests
 
 ### Flux de contribution
-▪ Une section sur le flux de contribution (branches, PR, issues). 
+
+1. **Ouvrir une issue** pour signaler un bogue. Décrire le problème, les étapes pour le reproduire, le résultat attendu/obtenu et les tests concernés.
+2. **Créer une branche dédiée** à partir de la branche principale à jour. Utiliser un nom explicite, par exemple `issue-1-nom_du_problème` pour une correction.
+3. **Effectuer des changements ciblés** et ajouter ou modifier les tests pertinents. Avant de soumettre la contribution, exécuter la suite de tests depuis la racine du projet :
+
+   ```bash
+   python -m pytest tests/ -v
+   ```
+
+4. **Ouvrir une pull request (PR)** vers la branche principale. Résumer les changements, indiquer l’issue associée et préciser les vérifications effectuées.
+5. **Fusionner la PR** après approbation lorsque les vérifications passent et mettre à jour la branche.
 
 ## Structure du projet
-- `app.py` : point d’entrée de l’application Flask
-- `operators.py` : fonctions d’opérations mathématiques
+- `app.py` : 
+Rôle du module: point d’entrée et contrôleur de l’application Flask. Il définit la route `/`, reçoit les expressions envoyées par le formulaire, valide et découpe une expression contenant deux opérandes et un opérateur, puis appelle la fonction mathématique correspondante. Il transmet le résultat ou le message d’erreur au modèle `templates/index.html`.
+Dépendances et hypothèses: 
+   - `app.py` dépend de Flask (`Flask`, `request` et `render_template`) et importe les fonctions du module local `operators.py`. Flask doit être installé à partir des dépendances du projet.
+   - L’application suppose que l’expression saisie contient exactement deux opérandes numériques séparés par un seul opérateur parmi `+`, `-`, `*` et `/`. Les espaces sont retirés avant l’analyse; les opérandes sont convertis en nombres décimaux (`float`).
+- `operators.py` : 
+Rôle du module: module de logique mathématique. Il définit les fonctions `add`, `subtract`, `multiply` et `divide`, appelées par `app.py` pour effectuer les opérations.
+Dépendances et hypothèses:
+   - `operators.py` ne dépend que des opérations arithmétiques intégrées de Python et suppose que ses arguments sont des nombres compatibles avec ces opérations. 
+   - Nous supposons que la division doit agir comme une vraie calculatrice, soit ne pas faire une division entiere par plancher, mais bien une division qui peut donner un nombre à virgule.  
 - `templates/index.html` : page HTML de l’interface utilisateur
 - `static/style.css` : styles de l’application
-
-  
-
-
-
-
 
