@@ -1,4 +1,7 @@
+from operator import add
 import re
+import shutil
+import subprocess
 from html.parser import HTMLParser
 
 import pytest
@@ -98,3 +101,38 @@ def test_initial_display_is_empty(client):
     match = re.search(r'<input[^>]*name="display"[^>]*value="([^"]*)"', html)
     assert match is not None
     assert match.group(1) == ""
+
+def test_first_digit_after_result_starts_new_calculation(client):
+    """Rôle:Le premier chiffre après un résultat doit remplacer le contenu précédent.
+    Entrées: client (FlaskClient) est le client de test Flask
+    Sortie: aucune"""
+    node = shutil.which("node")
+    if node is None:
+        pytest.skip("Node.js est nécessaire pour exécuter le JavaScript du gabarit.")
+
+    response = client.post("/", data={"display": "2+3"})
+    html = response.data.decode()
+    display_match = re.search(
+        r'<input[^>]*name="display"[^>]*value="([^"]*)"', html
+    )
+    script_match = re.search(r"<script>(.*?)</script>", html, re.DOTALL)
+
+    assert display_match is not None
+    assert script_match is not None
+
+    runner = """
+    const vm = require("vm");
+    const display = { value: process.argv[1] };
+    const context = { document: { getElementById: () => display } };
+    vm.runInNewContext(process.argv[2], context);
+    context.appendToDisplay("4");
+    console.log(display.value);
+    """
+    result = subprocess.run(
+        [node, "-e", runner, display_match.group(1), script_match.group(1)],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+
+    assert result.stdout.strip() == "4"

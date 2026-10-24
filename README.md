@@ -45,10 +45,6 @@ Donc il faut lancer cette commande: ``pip install -r requirements.txt``
      ```bash
      source .venv/bin/activate
      ```
-4. Installer les dépendances :
-   ```bash
-   pip install flask
-   ```
 
 ## Lancement
 ▪ Des instructions d’utilisation détaillées (comment lancer l’app, comment 
