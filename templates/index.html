@@ -38,13 +38,20 @@
 </div>
 
 <script>
-   /** Ajoute une valeur au champ d'affichage de la calculatrice.
+   /** Ajoute une valeur au champ d'affichage de la calculatrice. Si c'est un nouveau calcul après un résultat, le champ est d'abord vidé.
     * @param {string} value Valeur ou opérateur à ajouter.
     * @returns {void} Met à jour le champ #display.
     */
+   let resultDisplayed = {{ 'true' if result is number else 'false' }};
    function appendToDisplay(value) {
       const display = document.getElementById('display');
+      const isDigit = value.length === 1 && '0123456789'.includes(value);
+      if (resultDisplayed && isDigit) {
+         display.value = '';
+      }
+
       display.value += value;
+      resultDisplayed = false;
    }
 
    /** Efface le champ d'affichage de la calculatrice.
